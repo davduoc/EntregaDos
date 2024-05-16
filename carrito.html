@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Mangas grupo 8</title>
+
+    <style>
+        #carrito-container {
+            margin: 0 auto;
+            width: 80%;
+        }
+    </style>
+</head>
+
+<body style="background: linear-gradient(to right, rgb(131, 44, 253), rgb(223, 159, 243));">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="img/icons/logo.png" alt="Logo_manga"> <!-- logo de nuestra pagina-->
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="inicio_sesion.html">Cuenta</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="carrito.html">Carrito</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalogo.html">Catálogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="buscar.html">Perrito del dia</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="carrito-container">
+        <h2>Carrito de Compras</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="carrito">
+                <!-- Aquí se agregan los productos -->
+            </tbody>
+        </table>
+
+        <br>
+        <label for="producto">Producto:</label>
+        <select id="producto">
+            <option value="Manga Shonen">Manga Shonen</option>
+            <option value="Manga Shojo">Manga Shojo</option>
+            <option value="Manga Ecchi">Manga Ecchi</option>
+            <option value="Manga Shonen ai">Manga Shonen ai</option>
+            <option value="Manga Shojo ai">Manga Shojo ai</option>
+            <option value="Manga Seinen">Manga Seinen</option>
+            <option value="Manga Josei">Manga Josei</option>
+            <option value="Manga Yaoi">Manga Yaoi</option>
+            <option value="Manga Yuri">Manga Yuri</option>
+        </select>
+        <label for="precio">Precio:</label>
+        <span id="precio"></span>
+        <button onclick="agregarProducto()">Agregar Producto</button>
+        <br>
+        <br>
+        <p>Total de la compra: <span id="total"></span></p>
+        <button onclick="confirmarCompra()">Confirmar Compra</button>
+    </div>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h5>Redes Sociales</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="http://www.facebook.com">Facebook</a></li>
+                        <li><a href="http://www.twitter.com">Twitter</a></li>
+                        <li><a href="http://www.instagram.com">Instagram</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <h5>Información de Contacto</h5>
+                    <address>
+                        <strong>Empresa XYZ</strong><br>
+                        Calle Principal 123<br>
+                        Santiago, Chile<br>
+                        <abbr title="Teléfono">Tel:</abbr> (123) 456-7890
+                    </address>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        var preciosProductos = {
+            "Manga Shonen": 7990,
+            "Manga Shojo": 7990,
+            "Manga Ecchi": 10990,
+            "Manga Shonen ai": 9990,
+            "Manga Shojo ai": 9990,
+            "Manga Seinen": 12990,
+            "Manga Josei": 9990,
+            "Manga Yaoi": 21990,
+            "Manga Yuri": 20990
+        };
+
+        document.getElementById("producto").addEventListener("change", function () {
+            var productoSeleccionado = this.value;
+            var precioProducto = preciosProductos[productoSeleccionado];
+            document.getElementById("precio").textContent = "$" + precioProducto.toFixed(2);
+        });
+
+        function agregarProducto() {
+            var producto = document.getElementById("producto").value;
+            var precio = preciosProductos[producto];
+
+            var fila = "<tr><td>" + producto + "</td><td>$" + precio.toFixed(2) + "</td><td><button onclick='eliminarProducto(this)'>Eliminar</button></td></tr>";
+
+            document.getElementById("carrito").innerHTML += fila;
+
+        
+            calcularTotal();
+        }
+
+        function eliminarProducto(elemento) {
+            var fila = elemento.parentNode.parentNode;
+            fila.parentNode.removeChild(fila);
+
+            
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            var total = 0;
+            var filas = document.querySelectorAll("#carrito tbody tr");
+            filas.forEach(function (fila) {
+                var precioTexto = fila.querySelector("td:nth-child(2)").textContent;
+                var precio = parseFloat(precioTexto.substring(1));
+                total += precio;
+            });
+
+            document.getElementById("total").textContent = "$" + total.toFixed(2);
+        }
+
+        function confirmarCompra() {
+            
+            window.location.href = "confirmarcompra.html";
+        }
+    </script>
+
+</body>
+
+</html>
